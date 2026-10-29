@@ -14,14 +14,14 @@ final class CommandTests: XCTestCase, @unchecked Sendable {
         let start = Date()
         let result = await Command.run("/bin/sleep", ["10"], timeout: 0.1)
         XCTAssertFalse(result.success)
-        XCTAssertTrue(result.reason.contains("Zeitlimit"))
+        XCTAssertTrue(result.reason.contains(tr("Zeitlimit")))
         XCTAssertLessThan(Date().timeIntervalSince(start), 2)
     }
 
     func testMissingExecutableIsReported() async {
         let result = await Command.run("/no-such-recorder-program", [])
         XCTAssertFalse(result.success)
-        XCTAssertTrue(result.reason.contains("fehlt"))
+        XCTAssertTrue(result.reason.contains(tr("Programm fehlt: %@", "/no-such-recorder-program")))
     }
 
     func testCancellationStopsTheActualProbe() async {
@@ -30,7 +30,7 @@ final class CommandTests: XCTestCase, @unchecked Sendable {
         let start = Date()
         task.cancel()
         let result = await task.value
-        XCTAssertEqual(result.reason, "Abgebrochen")
+        XCTAssertEqual(result.reason, tr("Abgebrochen"))
         XCTAssertLessThan(Date().timeIntervalSince(start), 2)
     }
 }

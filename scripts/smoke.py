@@ -17,6 +17,7 @@ with tempfile.TemporaryDirectory() as directory:
         return result
 
     assert 'record' in run('--help').stdout
+    assert '测量网络连接' in run('--help', '--language', 'zh-Hans').stdout
     run('record', '--interval', '0', ok=False)
     run('record', '--duration', 'nan', ok=False)
     run('record', '--output', str(root / 'missing' / 'test.afr'), ok=False)
@@ -31,6 +32,11 @@ with tempfile.TemporaryDirectory() as directory:
     run('compare', str(recording), str(recording), '--output', str(root / 'compare.html'))
     run('report', str(recording), '--output', str(root / 'new.html'))
     run('report', str(recording), '--output', str(root / 'new.html'), ok=False)
+    run('report', str(recording), '--language', 'en', '--output', str(root / 'en.html'))
+    assert 'LOCAL CONNECTION REPORT' in (root / 'en.html').read_text()
+    run('report', str(recording), '--language', 'zh-Hans', '--output', str(root / 'zh.html'))
+    assert '本地连接报告' in (root / 'zh.html').read_text()
+    run('report', str(recording), '--language', 'invalid', ok=False)
     interrupted = root / 'interrupt.afr'
     process = subprocess.Popen([binary, 'record', '--output', str(interrupted)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     time.sleep(0.8)

@@ -30,7 +30,8 @@ public enum Probes {
                             external: c.success || p.success, dns: d.success, https: h,
                             network: "\(route.interface) / \(route.address ?? "kein IPv4-Router")")
         result.details = [
-            "Router": route.address.map { "\($0): \(g.success ? "antwortet" : g.reason)" } ?? "Kein IPv4-Standardrouter gefunden",
+            "Router": route.address == nil ? "Kein IPv4-Standardrouter gefunden" : (g.success ? "antwortet" : g.reason),
+            "Routeradresse": route.address ?? "unbekannt",
             "Interface": route.interface,
             "Cloudflare IP": c.success ? "antwortet" : c.reason,
             "Google IP": p.success ? "antwortet" : p.reason,

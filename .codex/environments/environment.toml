@@ -1,0 +1,10 @@
+version = 1
+name = "Ausfallrekorder"
+
+[setup]
+script = ""
+
+[[actions]]
+name = "Run"
+icon = "run"
+command = "sh script/build_and_run.sh"

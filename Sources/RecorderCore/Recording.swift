@@ -3,14 +3,17 @@ import Foundation
 public enum Health: String, Codable, Sendable {
     case online, local, internet, nameOrHTTPS, unknown
 
-    public var title: String {
-        switch self {
+    public var title: String { title(in: .current) }
+
+    public func title(in language: Language) -> String {
+        let source: String = switch self {
         case .online: "Verbindung erreichbar"
         case .local: "Router und Internet antworten nicht"
         case .internet: "Router antwortet, Internetprüfung fehlgeschlagen"
         case .nameOrHTTPS: "IP erreichbar, DNS-/HTTPS-Prüfung fehlgeschlagen"
         case .unknown: "Verbindung nicht bestätigt"
         }
+        return L.text(source, language: language)
     }
 }
 
