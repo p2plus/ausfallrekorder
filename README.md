@@ -54,7 +54,7 @@ Gatekeeper; use macOS's normal Open Anyway flow if you trust your own build.
 ## Linux
 
 The Linux version is a terminal program. No browser server, desktop dependencies,
-root privileges, or daemon. Tested on Ubuntu 24.04 ARM64; CI also targets x86_64.
+root privileges, or daemon. Tested on Ubuntu 24.04 ARM64 and x86_64 (GitHub CI).
 
 Install probe tools (Debian/Ubuntu):
 

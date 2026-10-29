@@ -27,7 +27,7 @@ open dist/Ausfallrekorder.app
 ## Linux
 
 Linux 版本为命令行工具，与 Mac 应用使用相同的测量核心和文件格式。
-已在 Ubuntu 24.04 ARM64 上测试，另设有 x86_64 CI。
+已在 Ubuntu 24.04 ARM64 和 x86_64（GitHub CI）上测试。
 
 ```sh
 sudo apt install iproute2 iputils-ping libc-bin libcurl4t64 libstdc++6

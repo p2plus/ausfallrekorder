@@ -11,10 +11,11 @@ Verified on 2026-10-29:
 - Documentation images are rendered from the actual SwiftUI view with a saved
   live recording; its router address was replaced with a documentation address.
 
-Initial private GitHub jobs did not start because the owner's account hit a
-billing/spending restriction. Local Linux verification used an isolated VM instead.
-The workflow also targets Ubuntu 24.04 x86_64; this architecture is not covered
-by the local ARM64 measurements.
+Public [GitHub CI run 40933690678](https://github.com/p2plus/ausfallrekorder/actions/runs/40933690678)
+passed both jobs: macOS and Ubuntu 24.04 x86_64, including builds, tests, live smoke
+checks and downloadable artifacts. Ubuntu ARM64 was additionally verified locally.
+A fresh Ubuntu container without Swift installed also passed the ARM64 binary's
+live smoke suite. The temporary Linux VM was stopped and removed after verification.
 
 ## Resource check
 

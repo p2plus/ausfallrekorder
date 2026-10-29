@@ -26,7 +26,7 @@ open dist/Ausfallrekorder.app
 ## Linux
 
 Das Terminalprogramm verwendet denselben Kern und dieselben Messdateien.
-Auf Ubuntu 24.04 ARM64 geprüft; zusätzlich ist eine x86_64-CI eingerichtet.
+Auf Ubuntu 24.04 ARM64 und x86_64 (GitHub CI) geprüft.
 
 ```sh
 sudo apt install iproute2 iputils-ping libc-bin libcurl4t64 libstdc++6
