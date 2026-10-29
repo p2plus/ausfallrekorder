@@ -1,0 +1,40 @@
+name: Build and test
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  macos:
+    runs-on: macos-15
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift test
+      - run: sh scripts/build-macos.sh
+      - run: python3 scripts/smoke.py dist/ausfallrekorder-cli
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Ausfallrekorder-macOS
+          path: |
+            dist/Ausfallrekorder-macOS.zip
+            dist/ausfallrekorder-cli
+  linux:
+    runs-on: ubuntu-24.04
+    container: swift:6.2-noble
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - run: apt-get update && apt-get install -y iproute2 iputils-ping python3
+      - run: swift test
+      - run: swift build -c release --product ausfallrekorder-cli --static-swift-stdlib
+      - run: python3 scripts/smoke.py .build/release/ausfallrekorder-cli
+      - name: Package Linux CLI
+        run: |
+          mkdir -p dist
+          cp .build/release/ausfallrekorder-cli dist/
+          cp README.md dist/
+          ldd dist/ausfallrekorder-cli > dist/runtime-libraries.txt
+          tar -czf Ausfallrekorder-linux-x86_64.tar.gz -C dist .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Ausfallrekorder-linux-x86_64
+          path: Ausfallrekorder-linux-x86_64.tar.gz
