@@ -16,7 +16,7 @@ public enum Command {
         let pending = PendingCommand(executable, arguments, timeout: timeout)
         return await withTaskCancellationHandler {
             await withCheckedContinuation { pending.start($0) }
-        } onCancel: { pending.stop("Abgebrochen") }
+        } onCancel: { pending.stop(tr("Abgebrochen")) }
     }
 }
 
@@ -49,14 +49,14 @@ private final class PendingCommand: @unchecked Sendable {
         }
         guard FileManager.default.isExecutableFile(atPath: executable) else {
             lock.unlock()
-            continuation.resume(returning: CommandResult(success: false, output: "", reason: "Programm fehlt: \(executable)"))
+            continuation.resume(returning: CommandResult(success: false, output: "", reason: tr("Programm fehlt: %@", executable)))
             return
         }
         self.continuation = continuation
         process.terminationHandler = { [self] _ in finish() }
         do {
             try process.run()
-            let deadline = DispatchWorkItem { [weak self] in self?.stop("Zeitlimit") }
+            let deadline = DispatchWorkItem { [weak self] in self?.stop(tr("Zeitlimit")) }
             self.deadline = deadline
             DispatchQueue.global(qos: .utility).asyncAfter(deadline: .now() + timeout, execute: deadline)
             lock.unlock()

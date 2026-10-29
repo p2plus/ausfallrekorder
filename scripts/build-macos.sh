@@ -7,6 +7,17 @@ app=dist/Ausfallrekorder.app
 mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
 cp "$bin_dir/Ausfallrekorder" "$app/Contents/MacOS/"
 cp "$bin_dir/ausfallrekorder-cli" dist/
+if [ ! -f Resources/AppIcon.icns ]; then
+  swift scripts/make-icon.swift
+  mkdir -p dist/AppIcon.iconset
+  for pixels in 16 32 128 256 512; do
+    sips -z "$pixels" "$pixels" Resources/AppIcon.png --out "dist/AppIcon.iconset/icon_${pixels}x${pixels}.png" >/dev/null
+    double=$((pixels * 2))
+    sips -z "$double" "$double" Resources/AppIcon.png --out "dist/AppIcon.iconset/icon_${pixels}x${pixels}@2x.png" >/dev/null
+  done
+  iconutil -c icns dist/AppIcon.iconset -o Resources/AppIcon.icns
+fi
+cp Resources/AppIcon.icns "$app/Contents/Resources/"
 cat > "$app/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -20,6 +31,9 @@ cat > "$app/Contents/Info.plist" <<'PLIST'
 <key>CFBundleVersion</key><string>1</string>
 <key>LSMinimumSystemVersion</key><string>14.0</string>
 <key>NSHighResolutionCapable</key><true/>
+<key>CFBundleIconFile</key><string>AppIcon</string>
+<key>LSUIElement</key><true/>
+<key>NSPrincipalClass</key><string>NSApplication</string>
 </dict></plist>
 PLIST
 codesign --force --sign - "$app"

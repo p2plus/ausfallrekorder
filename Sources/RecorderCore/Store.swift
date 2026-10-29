@@ -3,7 +3,7 @@ import Foundation
 public enum RecorderError: LocalizedError {
     case invalid(String)
     public var errorDescription: String? {
-        switch self { case .invalid(let message): message }
+        switch self { case .invalid(let message): tr(message) }
     }
 }
 

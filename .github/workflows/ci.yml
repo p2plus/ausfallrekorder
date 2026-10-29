@@ -25,16 +25,9 @@ jobs:
       - uses: actions/checkout@v4
       - run: apt-get update && apt-get install -y iproute2 iputils-ping python3
       - run: swift test
-      - run: swift build -c release --product ausfallrekorder-cli --static-swift-stdlib
-      - run: python3 scripts/smoke.py .build/release/ausfallrekorder-cli
-      - name: Package Linux CLI
-        run: |
-          mkdir -p dist
-          cp .build/release/ausfallrekorder-cli dist/
-          cp README.md dist/
-          ldd dist/ausfallrekorder-cli > dist/runtime-libraries.txt
-          tar -czf Ausfallrekorder-linux-x86_64.tar.gz -C dist .
+      - run: sh scripts/build-linux.sh
+      - run: python3 scripts/smoke.py dist/linux/ausfallrekorder-cli
       - uses: actions/upload-artifact@v4
         with:
           name: Ausfallrekorder-linux-x86_64
-          path: Ausfallrekorder-linux-x86_64.tar.gz
+          path: dist/Ausfallrekorder-linux-x86_64.tar.gz
